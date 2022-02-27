@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import study.springmvc.itemservice.domain.item.Item;
 import study.springmvc.itemservice.domain.item.ItemRepository;
 
@@ -46,17 +43,73 @@ public class basicItemController {
         return "basic/item";
     }
 
+    /**
+     * 상품 등록 폼
+     * @return
+     */
     @GetMapping(value = "/add")
     public String addForm() {
         return "basic/addForm";
     }
 
-    @PostMapping(value = "/add")
-    public String save() {
-        return "basic/addForm";
+    /**
+     * 상품 등록 v1
+     * @param itemName
+     * @param price
+     * @param quantity
+     * @param model
+     * @return
+     */
+    //@PostMapping(value = "/add")
+    public String addItemV1(@RequestParam("itemName") String itemName,
+                       @RequestParam("price") Integer price,
+                       @RequestParam("quantity") Integer quantity,
+                       Model model) {
+        Item item = new Item();
+        item.setItemName(itemName);
+        item.setPrice(price);
+        item.setQuantity(quantity);
+
+        itemRepository.save(item);
+
+        model.addAttribute("item", item);
+
+        return "basic/item";
     }
 
+    /**
+     * 상품 등록 v2
+     * @param item
+     * @return
+     */
+    //@PostMapping(value = "/add")
+    public String addItemV2(@ModelAttribute("item") Item item, Model model) {
+        itemRepository.save(item);
+        //model.addAttribute("item", item);
+        return "basic/item";
+    }
 
+    /**
+     * 상품 등록 v3
+     * @param item
+     * @return
+     */
+    //@PostMapping(value = "/add")
+    public String addItemV3(@ModelAttribute Item item) {
+        itemRepository.save(item);
+        return "basic/item";
+    }
+
+    /**
+     * 상품 등록 v4
+     * @param item
+     * @return
+     */
+    @PostMapping(value = "/add")
+    public String addItemV4(Item item) {
+        itemRepository.save(item);
+        return "basic/item";
+    }
 
     /**
      * 테스트용 데이터 추가
