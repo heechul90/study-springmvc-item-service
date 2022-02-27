@@ -82,7 +82,7 @@ public class basicItemController {
      * @param item
      * @return
      */
-    //@PostMapping(value = "/add")
+    @PostMapping(value = "/add")
     public String addItemV2(@ModelAttribute("item") Item item, Model model) {
         itemRepository.save(item);
         //model.addAttribute("item", item);
@@ -105,10 +105,32 @@ public class basicItemController {
      * @param item
      * @return
      */
-    @PostMapping(value = "/add")
+    //@PostMapping(value = "/add")
     public String addItemV4(Item item) {
         itemRepository.save(item);
         return "basic/item";
+    }
+
+    /**
+     * 상품 수정 폼
+     * @param itemId
+     * @param model
+     * @return
+     */
+    @GetMapping(value = "/{itemId}/edit")
+    public String editForm(@PathVariable("itemId") Long itemId, Model model) {
+        Item item = itemRepository.findById(itemId);
+        model.addAttribute("item", item);
+        return "basic/editForm";
+    }
+
+    /**
+     * 상품 수정
+     */
+    @PostMapping(value = "/{itemId}/edit")
+    public String edit(@PathVariable("itemId") Long itemId, @ModelAttribute("item") Item item) {
+        itemRepository.update(itemId, item);
+        return "redirect:/basic/items/{itemId}";
     }
 
     /**
